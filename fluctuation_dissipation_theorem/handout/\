@@ -1,0 +1,357 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% How to use writeLaTeX: 
+%
+% You edit the source code here on the left, and the preview on the
+% right shows you the result within a few seconds.
+%
+% Bookmark this page and share the URL with your co-authors. They can
+% edit at the same time!
+%
+% You can upload figures, bibliographies, custom classes and
+% styles using the files menu.
+%
+% If you're new to LaTeX, the wikibook is a great place to start:
+% http://en.wikibooks.org/wiki/LaTeX
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{tufte-handout}
+\usepackage[utf8]{inputenc} 
+\usepackage{tabularx} 
+
+
+%\geometry{showframe}% for debugging purposes -- displays the margins
+
+\usepackage{amsmath}
+
+% Set up the images/graphics package
+\usepackage{graphicx}
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\graphicspath{{graphics/}}
+
+\title{The Fluctuation-Dissipation Theorem}
+\author{Friedrich Schüßler}
+\date{15 January 2016}  % if the \date{} command is left out, the current date will be used
+
+% The following package makes prettier tables.  We're all about the bling!
+\usepackage{booktabs}
+
+% The units package provides nice, non-stacked fractions and better spacing
+% for units.
+\usepackage{units}
+
+% The fancyvrb package lets us customize the formatting of verbatim
+% environments.  We use a slightly smaller font.
+\usepackage{fancyvrb}
+\fvset{fontsize=\normalsize}
+
+% Small sections of multiple columns
+\usepackage{multicol}
+
+% Provides paragraphs of dummy text
+\usepackage{lipsum}
+
+% These commands are used to pretty-print LaTeX commands
+\newcommand{\doccmd}[1]{\texttt{\textbackslash#1}}% command name -- adds backslash automatically
+\newcommand{\docopt}[1]{\ensuremath{\langle}\textrm{\textit{#1}}\ensuremath{\rangle}}% optional command argument
+\newcommand{\docarg}[1]{\textrm{\textit{#1}}}% (required) command argument
+\newenvironment{docspec}{\begin{quote}\noindent}{\end{quote}}% command specification environment
+\newcommand{\docenv}[1]{\textsf{#1}}% environment name
+\newcommand{\docpkg}[1]{\texttt{#1}}% package name
+\newcommand{\doccls}[1]{\texttt{#1}}% document class name
+\newcommand{\docclsopt}[1]{\texttt{#1}}% document class option name
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% My own definitions
+\usepackage{color, colortbl}  
+\definecolor{TableColor}{HTML}{A1D99B}
+
+% Math stuff
+\newcommand*\diff{\mathop{}\!\text{d}}
+\newcommand*\Diff[1]{\mathop{}\!\text{d^#1}}
+\DeclareMathOperator{\Tr}{Tr}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\maketitle% this prints the handout title, author, and date
+
+\begin{abstract}
+\noindent The fluctuation-dissipation theorem (FDT) connects the fluctuation properties
+of a system in equilibrium with the response function of the system to an 
+external perturbation. A general proof is based on linear response theory, valid both 
+in a quantum mechanical context as well as for classical systems. The outlines of both 
+theories are presented. Furthermore, two possible experimental applications are 
+shown, one measuring the viscoelastic properties of complex fluids, the second one 
+testing the question of whether a hearing involves active and thus non-equilibrium 
+processes. 
+\end{abstract}
+
+%\printclassoptions
+
+%The Tufte-\LaTeX\ document classes define a style similar to the
+%style Edward Tufte uses in his books and handouts.  Tufte's style is known
+%for its extensive use of sidenotes, tight integration of graphics with
+%text, and well-set typography.  This document aims to be at once a
+%demonstration of the features of the Tufte-\LaTeX\ document classes
+%and a style guide to their use.
+
+\section{Historical introduction: Brownian motion}
+\label{sec:historical_introduction}
+%\subsection{Brownian Motion}
+%\label{sub:brownian_motion}
+\begin{tabular}{*{3}{l}}
+    Observed    & Robert Brown & 1827 \\
+    Theory      & Albert Einstein & 1905 \\
+    Experiment    & Jean-Baptiste Perrin & 1908 
+\end{tabular}
+\\
+Einstein-Smoluchowski relation:
+\begin{equation}
+    D
+        = \lim_{t \to \infty} \frac{ \left \langle x^2(t) \right \rangle}{2t} 
+        = \frac{k T}{m \gamma} \,.
+    \label{eq:einstein_relation}
+\end{equation}
+When describing the position of the particle by a Langevin equation%
+\footnote{Langevin's derivation followed 1908}
+\begin{align}
+    \label{eq:langevin}
+    \partial_t u &= -\gamma u + L(t) \\
+    \text{with} \qquad \left \langle L(t) \right \rangle = 0; &\quad 
+        \left \langle L(t)L(t') \right \rangle = \Gamma \delta(t - t') \,,
+\end{align}
+and using the equipartition law
+\begin{equation}
+        \frac{1}{2} m \left \langle u^2 \right \rangle  
+            = \frac{1}{2} k T \,,
+        %\quad \Rightarrow \quad \frac{\Gamma}{2\gamma} = \frac{kt}{m}
+\end{equation}
+the microscopic fluctuation $L(t)$ are related to the macroscopic quantity D by
+\begin{equation}
+    \left \langle L(t)L(t') \right \rangle = 2 \gamma^2 D  \delta(t - t') \,.
+    \label{eq:brownian_fluctuation}
+\end{equation}
+This is a manifestation of the fluctuation-dissipation theorem.
+Experimental verification by Perrin in 1908 also persuaded the remaining sceptics 
+of the existence of atoms.
+
+\section{Linear Response Theory}
+\label{sec:linear_response_theory}
+Consider the Hamiltonian system with 
+\begin{equation}
+    H(t) = H_0 - B h(t)\,,
+    \label{eq:hamiltonian}
+\end{equation}
+where $H_0$ is the equilibrium Hamiltonian with known eigenstates, $h(t)$ is a small 
+perturbation, i.e. a field coupling to the conjugate operator $B$. 
+In the interaction picture, the time evolution operator $U(t, t')$ is described as the 
+product of an equilibrium part 
+$U_0(t, t_0) := e^{iH_0(t-t_0) / \hbar}$
+and one due to the perturbation, $\hat{U}(t, t_0)$.
+Operators evolve in time according to 
+\begin{equation}
+    A^I(t) = U_0^{-1}(t, t_0) A U_0(t, t_0) \,.
+    \label{eq:operators}
+\end{equation}
+The averaged operator can be calculated using only the equilibrium part:
+\begin{equation}
+\left \langle A(t) \right \rangle_{ne} 
+    = \left \langle A \right \rangle_{eq} - 
+    \frac{1}{i \hbar} 
+    \int_{t_0}^{t} \left \langle [A^I(t), B^I(t)] \right \rangle_{eq} h(t')\diff t' 
+    + \mathcal{O}(h^2)
+    \label{eq:ne_average}
+\end{equation}
+where
+\begin{equation}
+    \left \langle A^I(t) \right \rangle_{eq}
+    = \frac{1}{Z} \Tr \rho_0 A^I(t) \,.
+    \label{eq:eq_av}
+\end{equation}
+Defining 
+$\delta A(t) 
+    :=  \left \langle A(t) \right \rangle_{ne} - \left \langle A \right \rangle_{eq}$\,,
+we get
+\begin{align}
+    \delta A(t) 
+    &= 2i\int_{t_0}^{t} \chi_{AB}''(t - t') h(t')\diff t' \\ 
+    &= \int_{-\infty}^{\infty}\chi_{AB}(t - t') h(t')\diff t' 
+\end{align}
+where
+\begin{align*}
+    \chi_{AB}''(t - t') 
+        &:= \frac{1}{2\hbar} \left \langle [A^I(t), B^I(t')] \right \rangle_{eq}\,;\\
+    \chi_{AB}(t - t')
+    &:= 2i \theta(t - t') \chi_{AB}''(t, t')\,.
+\end{align*}
+In frequency domain:
+\begin{equation}
+    \delta A(\omega) = \chi_{AB}(\omega) h(\omega) \,.
+    \label{eq:dA}
+\end{equation}
+
+
+%, governed by
+%\begin{equation}
+    %i \hbar \partial_t U(t, t') = H(t) U(t, t'); \quad U(t, t) = 1
+    %\label{eq:u}
+%\end{equation}
+%is split into the parts
+%\begin{align}
+    %\label{eq:u_split}
+    %U(t, t_0) &= U_0(t, t_0)\hat{U}(t, t_0) \\
+    %\text{where} \quad U_0(t, t_0) &:= e^{iH_0(t-t_0) / \hbar} \,.
+%\end{align}
+%Integrating Equation \eqref{eq:u} and approximating yields
+%\begin{equation}
+    %\hat{U}(t, t_0) 
+    %= 1 - \frac{1}{i \hbar} \int_{t_0}^{t}B^I(t')h(t')\diff t' + 
+    %\mathcal{O}(h^2) \,.
+    %\label{eq:u_hat}
+%\end{equation}
+
+
+
+
+%\begin{marginfigure}%
+  %\includegraphics[width=\linewidth]{helix}
+  %\caption{This is a margin figure.  The helix is defined by 
+    %$x = \cos(2\pi z)$, $y = \sin(2\pi z)$, and $z = [0, 2.7]$.  The figure was
+    %drawn using Asymptote (\url{http://asymptote.sf.net/}).}
+  %\label{fig:marginfig}
+%\end{marginfigure}
+%\begin{Verbatim}
+%\begin{marginfigure}
+  %\includegraphics{helix}
+  %\caption{This is a margin figure.}
+%\end{marginfigure}
+%\end{Verbatim}
+
+%The \docenv{marginfigure} and \docenv{margintable} environments accept an optional parameter \docopt{offset} that adjusts the vertical position of the figure or table.  See the ``\nameref{sec:sidenotes}'' section above for examples.  The specifications are:
+%\begin{docspec}
+  %\doccmd{begin\{marginfigure\}[\docopt{offset}]}\\
+  %\qquad\ldots\\
+  %\doccmd{end\{marginfigure\}}\\
+  %\mbox{}\\
+  %\doccmd{begin\{margintable\}[\docopt{offset}]}\\
+  %\qquad\ldots\\
+  %\doccmd{end\{margintable\}}\\
+%\end{docspec}
+
+%Figure~\ref{fig:fullfig} is an example of the \Verb|figure*|
+%environment and figure~\ref{fig:textfig} is an example of the normal
+%\Verb|figure| environment.
+
+%\begin{figure*}[h]
+  %\includegraphics[width=\linewidth]{sine.pdf}%
+  %\caption{This graph shows $y = \sin x$ from about $x = [-10, 10]$.
+  %\emph{Notice that this figure takes up the full page width.}}%
+  %\label{fig:fullfig}%
+%\end{figure*}
+
+%\begin{figure}
+  %\includegraphics{hilbertcurves.pdf}
+%%  \checkparity This is an \pageparity\ page.%
+  %\caption{Hilbert curves of various degrees $n$.
+  %\emph{Notice that this figure only takes up the main textblock width.}}
+  %\label{fig:textfig}
+  %%\zsavepos{pos:textfig}
+  %\setfloatalignment{b}
+%\end{figure}
+
+%Table~\ref{tab:normaltab} shows table created with the \docpkg{booktabs}
+%package.  Notice the lack of vertical rules---they serve only to clutter
+%the table's data.
+
+%\begin{table}[ht]
+  %\centering
+  %\fontfamily{ppl}\selectfont
+  %\begin{tabular}{ll}
+    %\toprule
+    %Margin & Length \\
+    %\midrule
+    %Paper width & \unit[8\nicefrac{1}{2}]{inches} \\
+    %Paper height & \unit[11]{inches} \\
+    %Textblock width & \unit[6\nicefrac{1}{2}]{inches} \\
+    %Textblock/sidenote gutter & \unit[\nicefrac{3}{8}]{inches} \\
+    %Sidenote width & \unit[2]{inches} \\
+    %\bottomrule
+  %\end{tabular}
+  %\caption{Here are the dimensions of the various margins used in the Tufte-handout class.}
+  %\label{tab:normaltab}
+  %%\zsavepos{pos:normaltab}
+%\end{table}
+
+%\section{Full-width text blocks}
+
+%In addition to the new float types, there is a \docenv{fullwidth}
+%environment that stretches across the main text block and the sidenotes
+%area.
+
+%\begin{Verbatim}
+%\begin{fullwidth}
+%Lorem ipsum dolor sit amet...
+%\end{fullwidth}
+%\end{Verbatim}
+
+%\begin{fullwidth}
+%\small\itshape\lipsum[1]
+%\end{fullwidth}
+
+%\section{Typography}\label{sec:typography}
+
+%\subsection{Typefaces}\label{sec:typefaces}
+%If the Palatino, \textsf{Helvetica}, and \texttt{Bera Mono} typefaces are installed, this style
+%will use them automatically.  Otherwise, we'll fall back on the Computer Modern
+%typefaces.
+
+%\subsection{Letterspacing}\label{sec:letterspacing}
+%This document class includes two new commands and some improvements on
+%existing commands for letterspacing.
+
+%When setting strings of \allcaps{ALL CAPS} or \smallcaps{small caps}, the
+%letter\-spacing---that is, the spacing between the letters---should be
+%increased slightly.\cite{Bringhurst2005}  The \Verb|\allcaps| command has proper letterspacing for
+%strings of \allcaps{FULL CAPITAL LETTERS}, and the \Verb|\smallcaps| command
+%has letterspacing for \smallcaps{small capital letters}.  These commands
+%will also automatically convert the case of the text to upper- or
+%lowercase, respectively.
+
+%The \Verb|\textsc| command has also been redefined to include
+%letterspacing.  The case of the \Verb|\textsc| argument is left as is,
+%however.  This allows one to use both uppercase and lowercase letters:
+%\textsc{The Initial Letters Of The Words In This Sentence Are Capitalized.}
+
+
+
+%\section{Installation}\label{sec:installation}
+%To install the Tufte-\LaTeX\ classes, simply drop the
+%following files into the same directory as your \texttt{.tex}
+%file:
+%\begin{quote}
+  %\ttfamily
+  %tufte-common.def\\
+  %tufte-handout.cls\\
+  %tufte-book.cls
+%\end{quote}
+
+%% TODO add instructions for installing it globally
+
+
+
+%\section{More Documentation}\label{sec:more-doc}
+%For more documentation on the Tufte-\LaTeX{} document classes (including commands not
+%mentioned in this handout), please see the sample book.
+
+%\section{Support}\label{sec:support}
+
+%The website for the Tufte-\LaTeX\ packages is located at
+%\url{http://code.google.com/p/tufte-latex/}.  On our website, you'll find
+%links to our \smallcaps{svn} repository, mailing lists, bug tracker, and documentation.
+
+%\bibliography{sample-handout}
+%\bibliographystyle{plainnat}
+
+
+
+\end{document}

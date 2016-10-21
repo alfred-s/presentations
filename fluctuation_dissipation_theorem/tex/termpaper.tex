@@ -1,0 +1,1187 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Presentation of Bachelor thesis. 
+%%  A network model of the neocortex accounting for its laminar structure
+%%  Friedrich Schuessler
+%%  September 2015
+
+\documentclass[xcolor=x11names,compress]{beamer}
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc}
+\usepackage{cmbright}
+
+%% General document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+\usepackage{caption}  
+\usepackage{subcaption}     % subfloats
+\usepackage{amsmath,mathtools}  % math stuff
+
+\usepackage{tikz}
+
+\usepackage[style=authoryear]{biblatex}
+\usetikzlibrary{decorations.fractals}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Beamer Layout %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\useoutertheme[subsection=false,shadow]{miniframes}
+\setbeamerfont{title like}{shape=\scshape}
+\setbeamerfont{frametitle}{shape=\scshape}
+
+\setbeamercolor*{lower separation line head}{bg=DeepSkyBlue4} 
+\setbeamercolor*{normal text}{fg=black,bg=white} 
+\setbeamercolor*{alerted text}{fg=red} 
+\setbeamercolor*{example text}{fg=black} 
+\setbeamercolor*{structure}{fg=black} 
+
+\usenavigationsymbolstemplate{}
+\setbeamercolor*{palette tertiary}{fg=black,bg=black!10} 
+\setbeamercolor*{palette quaternary}{fg=black,bg=black!10} 
+
+\setbeamercovered{dynamic} % enable pause
+
+\renewcommand{\(}{\begin{columns}}
+\renewcommand{\)}{\end{columns}}
+\newcommand{\<}[1]{\begin{column}{#1}}
+\renewcommand{\>}{\end{column}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\useoutertheme{infolines} % authors, etc.
+
+% Hide the "/ N" in slide "n / N":
+\makeatletter 
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  %\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    %\usebeamerfont{author in head/foot}\insertshortauthor~~\beamer@ifempty{\insertshortinstitute}{}{(\insertshortinstitute)}
+  %\end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.666666\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{}%
+    \usebeamerfont{date in head/foot}\hspace*{2em}
+    \insertframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliography{presentation.bib}
+
+\DeclareGraphicsExtensions{.pdf,.png,.jpg, .eps}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% My own definitions
+\usepackage{color, colortbl}  
+\definecolor{TableColor}{HTML}{A1D99B}
+
+% Math stuff
+\newcommand*\diff{\mathop{}\!\text{d}}
+\newcommand*\Diff[1]{\mathop{}\!\text{d^#1}}
+\DeclareMathOperator{\Tr}{Tr} % Trace
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{frame}{}
+\title[FTD]{The Fluctuation-Dissipation Theorem}
+\author{
+Friedrich Schüßler}
+\date{\normalsize 15 January 2016}
+%\date{\today}
+\titlepage
+
+\centering 
+Supervisor: Prof. Oliver Mülken \& Dr. Maxim Dolgushev 
+\end{frame}
+
+%\begin{frame}{Table of contents}
+    %\tableofcontents
+%\end{frame}
+
+%\AtBeginSection[]{
+%\begin{frame}{Table of contents}
+    %\tableofcontents[currentsection]
+%\end{frame}
+%}
+
+%%%%%%%%%%%%%%%%%%% Start
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[t]{}
+    \includegraphics[height=0.9\textheight]{../figures/timeline_full}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[t]{}
+    \includegraphics[height=0.9\textheight]{../figures/timeline0}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Historical Introduction: Brownian Motion}
+\label{sec:brownian_motion}
+
+% Brownian Motion
+\begin{frame}{Brownian Motion}
+    \includegraphics[height=0.8\textheight]{../figures/brownian}
+\end{frame}
+
+% Langevin
+\begin{frame}[t]{Brownian Motion}
+Langevin equation:
+\begin{align*}
+    \partial_t u &= -\gamma u + L(t) \\
+    \text{with} \qquad \left \langle L(t) \right \rangle = 0; &\quad 
+        \left \langle L(t)L(t') \right \rangle = \Gamma \delta(t - t') 
+\end{align*}
+\only<2-4>{
+Average squared velocity:
+\begin{equation*}
+    \left \langle u^2(t)\right \rangle 
+    = \frac{\Gamma}{2 \gamma} \left( 1 - e^{-2\gamma t} \right) 
+\end{equation*}
+}
+\only<3-4>{
+Equipartition law: 
+\begin{equation*}
+        \frac{1}{2} m \left \langle u^2 \right \rangle  
+            = \frac{1}{2} k T
+        %\quad \Rightarrow \quad \frac{\Gamma}{2\gamma} = \frac{kt}{m}
+\end{equation*}
+}
+\only<4>{
+\begin{equation*}
+\implies \boxed{
+            \Gamma = \frac{2\gamma kT}{m}
+}
+\end{equation*}
+}
+\end{frame}
+
+ 
+% Perrin
+\begin{frame}{Perrin's experiment (1908)}
+\begin{equation*}
+    \text{Displacement for $t \gg 1/\gamma$:} \qquad \qquad
+\left \langle x^2(t) \right \rangle = \frac{2kT}{m\gamma} t
+\end{equation*}
+    \only<2>{
+    \includegraphics[height=0.8\textheight]{../figures/perrin1}\\
+    }
+    \only<3>{
+    \includegraphics[height=0.8\textheight]{../figures/perrin2}\\
+}
+    \only<4>{
+    \includegraphics[height=0.8\textheight]{../figures/perrin3}\\
+    }
+    \only<5>{
+    \includegraphics[height=0.8\textheight]{../figures/perrin4}\\
+}
+    %/His result: $7.15 \times 10^{23}\,\text{mol}^{-1}$ 
+    %\quad (today: $6.022 \times 10^{23}\,\text{mol}^{-1}$)
+\end{frame}
+
+% Intro Pic
+\begin{frame}{}
+    \includegraphics[height=0.8\textheight]{../figures/intro}
+\end{frame}
+
+% Linear Response Theory
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[t]{}
+    \includegraphics[height=0.9\textheight]{../figures/timeline1}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Linear Response Theory}
+\label{sec:linear_response_theory}
+\begin{frame}[t]{Response to a perturbation}
+    \only<1>{
+    \includegraphics[height=0.8\textheight]{../figures/linear_response0}
+    }
+    \only<2>{
+    \includegraphics[height=0.8\textheight]{../figures/linear_response1}
+    }
+\end{frame}
+
+\begin{frame}[t]{Perturbed system}
+    Perturbation $f(t)$ coupling to operator $A$:
+\begin{equation*}
+    H(t) = H_0 - A \,f(t)
+\end{equation*} 
+\only<2->{%
+Non-equilibrium average:
+\begin{equation*}
+\left \langle A(t) \right \rangle_{ne} = \frac{1}{Z}\Tr  \rho_0 A(t)
+\end{equation*}
+where 
+\begin{align*}
+    Z &= \text{partition function} \\
+    \rho_0 &= \text{equilibrium density matrix}
+\end{align*}
+}
+\end{frame}
+
+\begin{frame}[t]{}
+    Average response
+\begin{align*}
+\delta A(t) 
+&:=  \left \langle A(t) \right \rangle_{ne} - \left \langle A \right \rangle_{eq} 
+\only<2->{%
+\intertext{
+... can be linearized in $f(t)$:
+}
+    \delta A(t) 
+    &= \int_{-\infty}^{\infty} \chi(t-t') f(t')\diff t'
+    + \mathcal{O}(f^2) 
+    }
+    \only<3>{
+\intertext{with response function}
+\chi(t - t') &:= 
+\frac{i}{\hbar}\,\theta(t - t')\,
+\left \langle [A(t), A(t')] \right \rangle_{eq}
+    }
+    \only<4->{
+\intertext{with response function}
+\chi(t - t') &:= 
+\frac{i}{\hbar} 
+\underbrace{
+\theta(t - t') 
+}_\text{
+causality
+    }
+\left \langle [A(t), A(t')] \right \rangle_{eq}
+    }
+\only<5>{
+    \intertext{$A(t)$ evolves due to $H_0$:}
+    A(t) &= e^{itH_0/\hbar}\,A\,e^{-itH_0/\hbar}
+}
+\end{align*}
+\end{frame}
+
+\begin{frame}[t]{Linear Response}
+\begin{columns}[T] % contents are top vertically aligned
+\begin{column}[T]{8.5cm} % each column can also be its own environment
+    \begin{align*}
+        \delta A(t) 
+        &= \int_{-\infty}^{\infty} \chi(t-t') f(t')\diff t' \\
+        \chi(t - t') &= 
+        \frac{i}{\hbar} 
+        \,\theta(t - t')\,
+        \left \langle [A(t), A(t')] \right \rangle_{eq}
+    \only<2->{
+        \intertext{... a convolution.}}
+    \only<3->{
+        \intertext{Frequency space:}
+        \Aboxed{
+            \delta A(\omega) &= \chi(\omega) f(\omega) 
+        }
+    }
+    \end{align*}
+\end{column}
+\begin{column}[T]{3cm} % alternative top-align that's better for graphics
+    \only<4>{
+    \includegraphics[height=0.8\textheight]{../figures/green_kubo}
+    }
+\end{column}
+\end{columns}
+\end{frame}
+
+% Measure chi
+\begin{frame}[t]{Measure $\chi(\omega)$}
+\includegraphics[height=0.15\textheight]{../figures/measure_linear_response}
+\only<2>{
+\includegraphics[height=0.8\textheight]{../figures/measure_chi0}
+}
+\only<3>{
+\includegraphics[height=0.8\textheight]{../figures/measure_chi1}
+}
+\only<4>{
+\includegraphics[height=0.8\textheight]{../figures/measure_chi2}
+}
+\end{frame}
+
+\section{Fluctuation-Dissipation Theorem}
+\label{sec:fluctuation_dissipation_theorem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[t]{}
+    \includegraphics[height=0.9\textheight]{../figures/timeline2}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[t]{The fluctuation-dissipation theorem}
+... is based on thermal equilibrium properties!
+\begin{itemize}
+    \item Hamiltonian $H_0$
+    \item 
+        $\rho = \rho_0$  const., 
+    \item 
+        $A(t) = e^{iH_0 t/\hbar} A e^{-iH_0 t/\hbar}$.
+    \item Observables: $\left \langle A(t) \right \rangle = \frac{1}{Z}\Tr  \rho_0 A(t)$
+\end{itemize}
+\vspace{0.2cm}
+\only<2>{
+\includegraphics[height=0.4\textheight]{../figures/fdt_scheme0}
+}
+\only<3>{
+\includegraphics[height=0.4\textheight]{../figures/fdt_scheme1}
+}
+\end{frame}
+
+\begin{frame}[t]{}
+%\begin{equation*}
+    %S(t-t') := \left \langle A(t)A(t') \right \rangle
+%\end{equation*}
+%\\
+%\vspace{0.5cm}
+Fluctuation -- autocorrelation function:
+\begin{align*}
+    S(t-t') &:= \left \langle A(t)A(t') \right \rangle
+\only<2->{
+\intertext{Dissipation -- response function:}
+    \chi(\omega) &= \chi'(\omega) + i \chi''(\omega) 
+}
+\only<3->{
+\intertext{In time domain:}
+    \chi''(t - t')
+    &= \frac{1}{2\hbar} \left \langle [A(t), A(t')] \right \rangle 
+}
+\only<4->{%
+\intertext{Symmetries of both functions $\implies$}
+    \Aboxed{
+    \chi''(\omega) 
+    &= \frac{1}{\hbar} \tanh \left( \frac{\hbar \omega}{2 k T} \right) S(\omega)
+}
+}
+\end{align*}
+\end{frame}
+
+% Classical limit
+\begin{frame}[t]{The classical limit, $\hbar \omega / kT \rightarrow 0$:}
+\begin{equation*}
+    \boxed{
+        \chi''(\omega) 
+            = \frac{\omega}{2 kT} S(\omega) 
+    }
+\end{equation*}
+\\ \vspace{0.5cm}
+\only<2>{
+The protagonists next to Green and Kubo:
+    \includegraphics[height=0.5\textheight]{../figures/nyquist}
+}
+\end{frame}
+
+
+% Remarks
+\begin{frame}[t]{What is experimentally accessible?}
+\begin{align*}
+    \quad \delta A  \qquad ~\text{or}~~& \qquad S \\
+    \quad \text{response}  ~\qquad \text{or}~~& \qquad \text{autocorrelation}
+\only<2-3>{
+    \intertext{Connection:}
+    \delta A \iff \chi \iff& \chi'' \iff S
+}
+\end{align*}
+\only<3>{%
+Kramers--Kronig relations:
+\begin{align*}
+    \chi 
+        &= \chi' + i \chi'' \\
+    \chi' 
+        &= P \int\frac{\chi''(\omega')}{\omega'-\omega}\frac{\diff \omega'}{\pi} \\
+    \chi''
+        &= - P \int\frac{\chi'(\omega')}{\omega'-\omega}\frac{\diff \omega'}{\pi}
+\end{align*}
+}
+\end{frame}
+
+\begin{frame}[t]{Why "dissipation"?}
+Displacement $A(t) = x(t)$, force $f(t) = f_0 \cos(\omega_0 t)$:
+\only<2-4>{
+\begin{align*}
+    \delta x(t) 
+    &= (x * f) (t) \\
+    &= \chi'(\omega_0)f_0 \cos(\omega_0 t)
+        + \chi''(\omega_0)f_0 \sin(\omega_0 t)
+\end{align*}
+}
+\only<3-4>{
+Dissipation $P$ = work per period $T$:
+\begin{align*}
+    P
+        &= \frac{1}{T} \int_{0}^{T}f(t) \dot{\delta x}(t)\diff t  \\
+        &= \frac{f_0}{2} \omega \chi''(\omega_0) 
+\end{align*}
+}
+\only<4>{
+In equilibrium: 
+\begin{equation*}
+S(\omega) > 0 
+\quad \implies \quad 
+\chi''(\omega) > 0
+\quad \implies \quad 
+    P > 0
+\end{equation*}
+}
+\end{frame}
+
+
+
+\section{Application: Microrheology}
+\label{sec:application_microrheology}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[t]{}
+    \includegraphics[height=0.9\textheight]{../figures/timeline3}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[t]{Viscoelastic fluids}
+\includegraphics[height=0.8\textheight]{../figures/viscoelastic}
+\end{frame}
+
+\begin{frame}[t]{Viscoelastic fluids}
+\begin{columns}[T] % contents are top vertically aligned
+\begin{column}[T]{6.5cm} % each column can also be its own environment
+    Maxwell model: \\
+    damper \quad + \quad spring:
+    \begin{align*}
+        \only<1-3>{
+        \sigma &= \sigma_D = \sigma_S \quad \text{stress} \\
+        \epsilon &= \epsilon_D + \epsilon_S \quad \text{strain} 
+        }
+        \only<2-3>{
+    \intertext{Stress-strain relation}
+        \eta \dot{\epsilon}(t) &= \sigma(t) + \tau \dot{\sigma}(t) \\\\
+        }
+        \only<3-3>{
+        \implies \quad 
+        \tilde{\sigma}(\omega) 
+        &= - \frac{i \omega \eta}{1 - i \omega \tau} \tilde{\epsilon}(\omega)
+        =: G^*(\omega) \tilde{\epsilon}(\omega)
+        }
+    \end{align*}    
+    \only<3-3>{
+    with complex shear modulus $G^*(\omega)$. 
+    }
+\end{column}
+\begin{column}[T]{3cm} % alternative top-align that's better for graphics
+        \includegraphics[height=0.2\textheight]{../figures/maxwell}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[t]{Experiment: Bead in viscoelastic fluid}
+\begin{columns}[T] % contents are top vertically aligned
+\begin{column}[T]{7cm} % each column can also be its own environment
+\only<2->{
+Generalized Stokes-Einstein equation:
+}
+\begin{align*}
+\only<2->{
+    \tilde{f}(\omega) &= 6 \pi a \eta^*(\omega) \tilde{\dot{\epsilon}}(\omega) 
+\intertext{with complex viscosity}
+}
+\only<2>{
+    \eta^*(\omega)  &:= \frac{\eta}{1 - i\omega \tau}
+\phantom{= \frac{G^*(\omega)}{-i\omega}}%
+}
+\only<3->{
+    \eta^*(\omega)  &:= \frac{\eta}{1 - i\omega \tau}
+    = \frac{G^*(\omega)}{-i\omega}%
+}
+%\intertext{For long time / low frequencies:}
+%\eta^*(\omega) &\rightarrow \eta
+\end{align*}
+\only<4>{%
+Linear response:
+    \begin{align*}
+    \phantom{
+        \implies \quad 
+    }
+        \tilde{\epsilon}(\omega) 
+        &= \chi(\omega) \tilde{f}(\omega) 
+        = \frac{\tilde{f}(\omega)}{6\pi a G^*(\omega)} \\
+    \end{align*}
+}
+\only<5->{%
+Linear response:
+    \begin{align*}
+    \phantom{
+        \implies \quad 
+    }
+        \tilde{\epsilon}(\omega) 
+        &= \chi(\omega) \tilde{f}(\omega) 
+        = \frac{\tilde{f}(\omega)}{6\pi a G^*(\omega)} \\
+        \implies \quad 
+        G^*(\omega) &= \frac{1}{6\pi a \chi(\omega)} 
+    \end{align*}
+}
+\end{column}
+\begin{column}[T]{3cm} % alternative top-align that's better for graphics
+    \includegraphics[height=0.7\textheight]{../figures/particle_tracking}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[t]{Experimental measurement of $G^*(\omega)$}
+    Mason et al., 1997 
+    \only<1-2>{
+    \includegraphics[height=0.6\textheight]{../figures/complex_modulus1}
+    }
+    \only<3>{
+    \includegraphics[height=0.6\textheight]{../figures/complex_modulus2}
+    }
+    \only<2->{
+    \begin{equation*}
+r(t) 
+\implies 
+S(\omega) 
+\implies 
+\chi''(\omega) 
+\implies 
+\chi(\omega)
+\implies 
+G^*(\omega)
+    \end{equation*}
+        }
+\end{frame}
+
+\section{Application: Active Hair-bundles}
+\label{sec:application_active_hearing}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[t]{}
+    \includegraphics[height=0.9\textheight]{../figures/timeline4}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}[t]{Is our system in equilibrium?}
+Fluctuation-dissipation theorem:
+\begin{equation*}
+\chi''(\omega) 
+    = \frac{\omega}{2 kT} S(\omega) 
+\end{equation*}
+
+Effective temperature:
+\begin{equation*}
+T_{\text{eff}}(\omega) := \frac{\omega}{2k}\frac{S(\omega)}{\chi''(\omega)}
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}[t]{Active hair-bundle motility}
+    \only<1>{
+    \includegraphics[height=0.8\textheight]{../figures/hairbundle1}
+    }
+    \only<2>{
+    \includegraphics[height=0.8\textheight]{../figures/hairbundle2}
+    }
+    \only<3>{
+    \includegraphics[height=0.8\textheight]{../figures/hairbundle3}
+    }
+\end{frame}
+
+
+\begin{frame}[t]{Experimental setup and testing linear response}
+    \only<1>{
+    \includegraphics[height=0.8\textheight]{../figures/bundle_setup1}
+    }
+    \only<2>{
+    \includegraphics[height=0.8\textheight]{../figures/bundle_setup2}
+    }
+    \only<3>{
+    \includegraphics[height=0.8\textheight]{../figures/bundle_setup3}
+    }
+\end{frame}
+
+\begin{frame}[t]{Experimental results}
+    Martin et al., 2001
+    \only<1>{
+    \includegraphics[height=0.8\textheight]{../figures/bundle_results0}
+    }
+    \only<2>{
+    \includegraphics[height=0.8\textheight]{../figures/bundle_results1}
+    }
+    \only<3>{
+    \includegraphics[height=0.8\textheight]{../figures/bundle_results2}
+}
+    \only<4>{
+    \includegraphics[height=0.8\textheight]{../figures/bundle_results3}
+}
+\end{frame}
+
+
+% Conclusion
+\section{Conclusion}
+\label{sec:conclusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[t]{}
+    \includegraphics[height=0.9\textheight]{../figures/timeline_full1}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[t]{}
+\large{Conclusion}
+\normalsize
+\begin{align*}
+\text{perturbed system} 
+~~\iff
+~~~~\text{response func}&\text{tion}~~~~
+\iff~~
+\text{autocorrelation} 
+&\\
+\delta A 
+\qquad \underset{1.}{\iff} \qquad 
+\chi 
+~~\underset{2.}{\iff}~~& \chi'' 
+~~\quad \underset{3.}{\iff} \qquad S 
+\end{align*}
+\only<2->{
+\begin{enumerate}
+    \item Linear response theory
+    \item Kramers-Kronig relations
+    \item Fluctuation-dissipation theorem
+\end{enumerate}
+}
+\only<3>{
+\begin{itemize}
+    \item Microrheology: 
+        \begin{equation*}
+        r(t) \implies S(\omega) \implies 
+        \chi''(\omega) \implies \chi(\omega)
+        \implies G^*(\omega)   
+        \end{equation*}
+\end{itemize}
+}\only<4->{
+\begin{itemize}
+    \item Microrheology: 
+        \begin{equation*}
+        r(t) \implies S(\omega) \implies 
+        \chi''(\omega) \implies \chi(\omega)
+        \implies G^*(\omega)   
+        \end{equation*}
+    \item Active hair-bundles:
+        \begin{equation*}
+            S(\omega), \chi(\omega) 
+            \implies T_\text{eff} \neq T \implies \text{actively driven}
+        \end{equation*}
+\end{itemize}
+    }
+
+\end{frame}
+
+
+% References
+\begin{frame}[t]
+    \frametitle<presentation>{References}    
+
+    \scriptsize
+    Theory \& Historic review:\\
+    \vspace{0.1cm}
+    \tiny
+    % Kubo
+    Kubo, Rep. 
+    The fluctuation-dissipation theorem.
+    \textit{Reports on progress in physics} 29.1 (1966).
+    \vspace{0.1cm}
+
+    % Nonequilibrium
+    Mazenko, Gene F.
+    Nonequilibrium statistical mechanics. 
+    \textit{John Wiley \& Sons}, 2008.
+    \vspace{0.1cm}
+
+    % Review
+    Marconi, Umberto Marini Bettolo, et al.
+    Fluctuation–dissipation: response theory in statistical physics.
+    \textit{Physics reports} 461.4 (2008).
+    \vspace{0.1cm}
+
+    %History
+    Newburgh, Ronald, Joseph Peidle, and Wolfgang Rueckner. 
+    Einstein, Perrin, and the reality of atoms: 1905 revisited.
+    \textit{American journal of physics} 74.6 (2006).
+    \vspace{0.1cm}
+
+    \scriptsize
+    Microrheology:\\
+    \vspace{0.1cm}
+    \tiny
+    % Bead in viscoelastic fluid
+    Mason, T. G., et al.
+    Particle tracking microrheology of complex fluids.
+    \textit{Physical Review Letters} 79.17 (1997).
+    \vspace{0.1cm}
+
+    Mason, T. G., \& Weitz, D. A. \\
+    Optical measurements of frequency-dependent 
+    linear viscoelastic moduli of complex fluids.  
+    \textit{Physical review letters}, 74(7), 1250, 1995. 
+    \vspace{0.1cm}
+
+    \scriptsize
+    Active hair-bundle motility:\\
+    \vspace{0.1cm}
+    \tiny
+    % Experimental setup bundle
+    Benser, Michael E., Robert E. Marquis, and A. J. Hudspeth. \\
+    Rapid, active hair bundle movements in hair cells from the bullfrog’s sacculus.
+    \textit{The Journal of Neuroscience} 16.18 (1996).
+    \vspace{0.1cm}
+
+    % Linear Response of hair cells
+    Martin, P., and A. J. Hudspeth. 
+    Compressive nonlinearity in the hair bundle's active response to mechanical stimulation.
+    \textit{Proceedings of the National Academy of Sciences} 98.25 (2001).
+    \vspace{0.1cm}
+
+    % F-D-T hair bundle
+    Martin, P., A. J. Hudspeth, and F. Jülicher. 
+    Comparison of a hair bundle's spontaneous oscillations with its response to 
+    mechanical stimulation reveals the underlying active process. 
+    \textit{Proceedings of the National Academy of Sciences} 98.25 (2001).
+    \vspace{0.1cm}
+
+    %% Further reading on hearing
+    Reichenbach, Tobias, and A. J. Hudspeth. 
+    The physics of hearing: fluid mechanics and the active process of the inner ear.
+    \textit{Reports on Progress in Physics} 77.7 (2014).
+    \vspace{0.1cm}
+
+    % Cochlea
+    %Hudspeth, A. J. 
+    %Integrating the active process of hair cells with cochlear function.
+    %\textit{Nature Reviews Neuroscience} 15.9 (2014).
+
+\end{frame}
+
+
+% Final
+\begin{frame}[t]{}
+    \includegraphics[height=0.8\textheight]{../figures/bullfrog}
+\end{frame}
+
+
+
+
+% Appendix
+\section*{Appendix}
+\label{sec:appendix}
+
+
+\begin{frame}{}
+    \huge Appendix
+\end{frame}
+
+% Backup: Heisenberg picture
+\begin{frame}[t]{Heisenberg picture}
+All time dependency carried by operators, while
+$\rho = \rho_{eq}$ constant. \\
+Operators:
+\begin{equation*}
+    A(t) = U^{-1}(t, t_0) A U(t, t_0)\,,
+\end{equation*}
+following the equations of motion
+\begin{equation*}
+    i \hbar \partial_t A(t) = [H(t), A(t)]\,.
+\end{equation*}
+Average measurements:
+\begin{equation*}
+    \left \langle A(t) \right \rangle_{ne} = \Tr  \rho_{eq} A(t)\,.
+\end{equation*}
+\end{frame}
+    
+\begin{frame}[t]{Deduction FDT}
+Start with correlation function
+\begin{equation*}
+    \bar{S}_{AB}(t-t') 
+        = \left \langle A(t)B(t') \right \rangle \,.
+\end{equation*}
+
+Using $A(t) = e^{itH/\hbar}A(t)e^{-itH/\hbar}$, one shows that
+\begin{align*}
+    \bar{S}_{AB}(t - t') 
+&= \frac{1}{Z}\Tr e^{-\beta H} A(t)B(t') \\
+&= \frac{1}{Z}\Tr e^{+i(t + i\beta\hbar) H/\hbar} Ae^{-i(t + i\beta\hbar) H / \hbar}
+    e^{-\beta H}B(t') \\
+&= \frac{1}{Z}\Tr A(t + i\beta\hbar)e^{-\beta H}B(t') \\
+&= \frac{1}{Z}\Tr e^{-\beta H}B(t')A(t + i\beta\hbar) \\
+&= \bar{S}_{BA}(t' - t - i\beta\hbar) \,.
+\end{align*}
+\end{frame}
+
+\begin{frame}[t]{}
+Then, with $\tau := t - t'$, 
+\begin{align*}
+\bar{S}_{AB}(\omega) 
+&= \int e^{i\omega\tau} \bar{S}_{AB}(-\tau - i\beta\hbar)\diff \tau \\
+&= \int e^{i\omega\tau} \left( \int
+\bar{S}_{AB}(\omega') e^{-i\omega'(-\tau - i\beta\hbar)}
+\frac{\diff \omega'}{2\pi}
+\right)\diff \tau \\
+&= \int e^{-\beta\hbar\omega'} 
+\bar{S}_{AB}(\omega') 2\pi \delta(\omega + \omega')
+\frac{\diff \omega'}{2\pi} \\
+&= \bar{S}_{AB}(-\omega) e^{+\beta \hbar \omega}\,.
+\end{align*}
+And inserting yields
+\begin{align*}
+\chi_{AB}''(t - t')
+    &= \frac{1}{2\hbar} \left \langle [A(t), B(t')] \right \rangle \\
+    &= \frac{1}{2\hbar} \left \langle \bar{S}_{AB}(\tau) - \bar{S}_{BA}(-\tau) \right \rangle\,, \\
+\Rightarrow \quad 
+\chi_{AB}''(\omega) 
+    &= \frac{1}{2\hbar}\left( \bar{S}_{AB}(\omega) - \bar{S}_{BA}(-\omega) \right)
+    = \frac{1 - e^{-\beta \hbar \omega}}{2 \hbar} \bar{S}_{AB}(\omega) \,.
+\end{align*}
+\end{frame}
+
+%\begin{frame}[t]
+%\begin{equation*}
+    %S_{AB}(t-t') 
+        %= \left \langle [A(t),B(t')]_+ \right \rangle \quad ; \quad
+    %\chi_{AB}''(t - t')
+        %= \frac{1}{2\hbar} \left \langle [A(t), B(t')] \right \rangle\,.
+%\end{equation*}
+%\begin{align*}
+    %S_{AB}(t-t') &= \left \langle [A(t),B(t')]_+ \right \rangle \\
+    %\chi_{AB}''(t - t')
+    %&= \frac{1}{2\hbar} \left \langle [A(t), B(t')] \right \rangle\,.
+%\end{align*}
+%\end{frame}
+
+
+%\begin{frame}[t]{The FDT connects} 
+%\vspace{1cm}
+    %the symmetrized correlation function 
+    %\begin{equation*}
+        %S_{AB}(t-t') := \left \langle [A(t),B(t')]_+ \right \rangle
+    %\end{equation*}
+    %with the imaginary part of the response function
+    %\begin{equation*}
+    %\chi_{AB}''(t - t')
+        %= \frac{1}{2\hbar} \left \langle [A(t), B(t')] \right \rangle\,.
+    %\end{equation*}
+%All calculations are done in equilibrium.
+%\end{frame}
+
+%% Deduction
+%\begin{frame}[t]{Deduction}
+    %is mainly based on symmetries: \\
+    %Introducing
+    %\begin{equation*}
+        %\bar{S}_{AB}(t-t') := \left \langle A(t)B(t') \right \rangle\,,
+    %\end{equation*}
+    %one finds that
+    %\begin{equation*}
+        %\bar{S}_{AB}(\omega) = \bar{S}_{AB}(-\omega) e^{+\beta \hbar \omega}\,,
+    %\end{equation*}
+    %and thus
+    %\begin{align*}
+    %\chi_{AB}''(\omega) 
+        %&= \frac{1}{2\hbar}\left( \bar{S}_{AB}(\omega) - \bar{S}_{BA}(-\omega) \right)\\
+        %&= \frac{1 - e^{-\beta \hbar \omega}}{2 \hbar} \bar{S}_{AB}(\omega) \,.
+    %\end{align*}
+%\end{frame}
+
+
+%\begin{frame}[t]{}
+%For the symmetrized correlations, one gets
+    %\begin{equation*}
+    %\chi_{AB}''(\omega) 
+    %= \frac{\omega}{2 E_\beta(\omega)} S_{AB}(\omega)
+    %\end{equation*}
+%where
+%\begin{equation*}
+    %E_\beta(\omega)
+        %:= \frac{\omega \hbar}{2} \coth(\frac{\beta \hbar \omega}{2})\,.
+%\end{equation*}\\
+%In the classical limit $\hbar \omega / kT \rightarrow 0$, 
+%\begin{equation*}
+%\chi_{AB}''(\omega) 
+    %= \frac{\omega}{2 kT} S_{AB}(\omega) \,.
+%\end{equation*}
+%\end{frame}
+
+
+%\begin{frame}[t]{Schrödinger picture}
+%System perturbed by field $h(t)$
+%coupling to operator $B$: 
+%\begin{equation*}
+    %H(t) = H_0 - B h(t)
+%\end{equation*} \\
+%\vspace{1cm}
+%\only<2-3>{
+%-- Density matrix $\rho(t)$ time dependent \\
+%-- Operators constant \\
+%\vspace{1cm}
+%}
+%\only<3>{
+%Macroscopic behavior: Averages of corresponding operators $A(t)$:
+%\begin{equation*}
+    %\left \langle A(t) \right \rangle_{ne} = \Tr  \rho(t) A
+%\end{equation*}
+%}
+%\end{frame}
+
+%% Kubo
+%\begin{frame}[t]{}
+%\includegraphics[height=0.8\textheight]{../figures/kubo}
+%\end{frame}
+
+%Interaction picture
+%\begin{frame}[t]{Interaction picture}
+%Time evolution operator $U(t, t')$ with
+%\begin{equation*}
+    %i \hbar \partial_t U(t, t') = H(t) U(t, t'); \quad U(t, t) = 1
+%\end{equation*}
+%Split: 
+%\begin{align*}
+    %\label{eq:}
+    %U(t, t_0) &= U_0(t, t_0)\hat{U}(t, t_0) \\
+    %\text{where} \quad U_0(t, t_0) &:= e^{iH_0(t-t_0) / \hbar} 
+%\end{align*}
+%\only<2-3>{
+%Operators:
+%\begin{equation*}
+    %A^I(t) = U_0^{-1}(t, t_0) A U_0(t, t_0)
+%\end{equation*}
+%}
+%\only<3>{
+%Integral equation for $\hat{U}$:
+    %\begin{align*}
+        %\hat{U}(t, t_0) 
+        %&= 1 - \frac{1}{i \hbar} \int_{t_0}^{t}B^I(t')h(t')\diff t'  + \mathcal{O}(h^2)
+    %\end{align*}
+%%Comparison yields
+%%\begin{equation*}
+    %%i\hbar \hat{U}(t, t_0)
+        %%= - B^I(t) h(t) \hat{U}(t, t_0) 
+%%\end{equation*}
+%}
+%\end{frame}
+%\begin{frame}[t]{Linear approximation}
+%Integral equation for $\hat{U}$:
+    %\begin{align*}
+        %\hat{U}(t, t_0) 
+        %&= 1 - \frac{1}{i \hbar} \int_{t_0}^{t}B^I(t')h(t')\hat{U}(t', t_0)\diff t'  \\
+        %&= 1 - \frac{1}{i \hbar} \int_{t_0}^{t}B^I(t')h(t')\diff t'  + \mathcal{O}(h^2)
+    %\end{align*}
+%\only<2>{
+%Back to the average: 
+%\begin{equation*}
+%\left \langle A(t) \right \rangle_{ne} 
+    %= \left \langle A \right \rangle_{eq} - 
+    %\frac{1}{i \hbar} 
+    %\int_{t_0}^{t} \left \langle [A^I(t), B^I(t)] \right \rangle_{eq} h(t')\diff t' 
+    %+ \mathcal{O}(h^2)
+%\end{equation*}
+%}
+%\end{frame}
+
+
+%\begin{frame}[t]{Non-equilibrium average}
+%\begin{align*}
+%\left \langle A(t) \right \rangle_{ne} 
+    %&= \Tr  \rho_{eq} A(t) \\
+    %&= \left \langle A \right \rangle_{eq} - 
+    %\frac{1}{i \hbar} 
+    %\int_{t_0}^{t} \left \langle [A^I(t), B^I(t)] \right \rangle_{eq} h(t')\diff t' 
+    %+ \mathcal{O}(h^2)
+%\end{align*}
+%%\begin{equation*}
+%%\left \langle A(t) \right \rangle_{ne} 
+    %%= \left \langle A \right \rangle_{eq} - 
+    %%\frac{1}{i \hbar} 
+    %%\int_{t_0}^{t} \left \langle [A^I(t), B^I(t)] \right \rangle_{eq} h(t')\diff t' 
+    %%+ \mathcal{O}(h^2)
+%%\end{equation*}
+%\only<2-3>{%
+%Average response:
+%\begin{equation*}
+%\delta A(t) 
+%:=  \left \langle A(t) \right \rangle_{ne} - \left \langle A \right \rangle_{eq} 
+%\end{equation*}
+%}
+%\only<3>{%
+%Inserting yields 
+%\begin{align*}
+    %\delta A(t) 
+    %&= 2i\int_{t_0}^{t} \chi_{AB}''(t, t') h(t')\diff t' \\ 
+    %\intertext{where} 
+    %\chi_{AB}''(t, t') 
+        %&:= \frac{1}{2\hbar} \left \langle [A^I(t), B^I(t')] \right \rangle_{eq}
+    %%&= \int_{-\infty}^{\infty}\chi_{AB}(t, t') h(t')\diff t' 
+%\end{align*}
+%}
+%\end{frame}
+
+%\begin{frame}[t]{Response function}
+%\begin{columns}[T] % contents are top vertically aligned
+%\begin{column}[T]{8.5cm} % each column can also be its own environment
+    %Time-translation invariance
+    %\begin{align*}
+        %\chi''_{AB}(t, t') &= \chi''_{AB}(t - t') 
+    %\only<2->{
+    %\intertext{and linear response function}
+        %\chi_{AB}(t - t')
+        %&:= 2i \theta(t - t') \chi_{AB}''(t - t')
+    %}
+    %\only<3->{
+    %\intertext{yield a convolution:}
+        %\delta A(t) 
+        %&= \int_{-\infty}^{\infty}\chi_{AB}(t - t') h(t')\diff t' 
+    %}
+    %\only<4->{
+    %\intertext{or in frequency space:}
+    %\Aboxed{
+        %\delta A(\omega) &= \chi_{AB}(\omega) h(\omega) 
+    %}
+    %}
+    %\end{align*}
+%\end{column}
+%\begin{column}[T]{3cm} % alternative top-align that's better for graphics
+    %\only<5>{
+    %\includegraphics[height=0.8\textheight]{../figures/green_kubo}
+    %}
+%\end{column}
+%\end{columns}
+%\end{frame}
+
+%\begin{equation*}
+    %\chi''_{AB}(t, t') = \chi''_{AB}(t - t')
+%\end{equation*}
+%...yields a convolution:
+    %\delta A(t) 
+    %&= \int_{-\infty}^{\infty}\chi_{AB}(t - t') h(t')\diff t' 
+
+
+
+%\begin{align*}
+    %\chi_{AB}(t - t')
+    %&:= 2i \theta(t - t') \chi_{AB}''(t - t')
+%\end{align*}
+    
+%\begin{frame}[t]{Finally}
+%...with time-translation invariance we get:
+%\begin{align*}
+    %\chi_{AB}(t, t') &= \chi_{AB}(t - t') \\
+    %\implies \quad 
+    %\delta A(t) 
+    %&= \int_{-\infty}^{\infty}\chi_{AB}(t - t') h(t')\diff t' 
+%\end{align*}
+%\only<2-3>{
+%... a convolution! $\implies$
+%%\begin{equation*}
+    %%\delta A(t) = (\chi_{AB} * h)(t) 
+    %%\quad \Leftrightarrow \quad  
+        %%\delta A(\omega) = \chi_{AB}(\omega) h(\omega) 
+%%\end{equation*}
+%\begin{equation*}
+    %\delta A(\omega) = \chi_{AB}(\omega) h(\omega) 
+%\end{equation*}
+%}
+%\only<3>{
+%The pioneers in the 1950s:
+    %\includegraphics[height=0.4\textheight]{../figures/green}
+%}
+%\end{frame}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% FDT
+%\begin{equation*}
+%\chi''(t - t')
+    %= \frac{1}{2\hbar} \left \langle [A(t), A(t')] \right \rangle 
+%\end{equation*}
+%\only<3>{%
+%Symmetries of both functions $\implies$
+%\begin{equation*}
+    %\boxed{
+    %\chi_{AB}''(\omega) 
+        %= \frac{\omega}{2 E_\beta(\omega)} S_{AB}(\omega)
+    %}
+%\end{equation*}
+%average energy of harmonic oscillator
+%\begin{equation*}
+    %E_\beta(\omega)
+        %:= \frac{\omega \hbar}{2} \coth\left(\frac{\beta \hbar \omega}{2} 
+           %\right)  
+%\end{equation*}\\
+%}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Conclusion
+%\begin{frame}[t]{Wrap-Up: 
+%}
+%\only<2-4>{
+%Linear response:
+%\begin{equation*}
+    %\delta A(t) = (\chi_{AB} * h)(t) 
+    %\quad \Leftrightarrow \quad  
+        %\delta A(\omega) = \chi_{AB}(\omega) f(\omega) 
+%\end{equation*}
+%}\only<3-4>{
+%Response function:
+%\begin{align*}
+    %\chi_{AB}(\omega) &= \chi'_{AB}(\omega) + i \chi''_{AB}(\omega)\\
+    %\text{where} \quad 
+    %\chi_{AB}''(t - t')
+        %&= \frac{1}{2\hbar} \left \langle [A(t), B(t')] \right \rangle  \\
+    %\chi_{AB}' 
+        %&= P \int\frac{\chi_{AB}''(\omega')}{\omega'-\omega}\frac{\diff \omega'}{\pi} 
+    %\quad \text{(Kramers--Kronig)}
+%\end{align*}
+%}
+%\only<4>{
+%The fluctuation-dissipation theorem:
+%\begin{equation*}
+    %\chi_{AB}''(\omega) = 
+    %\begin{cases}
+        %\frac{\omega}{2 E_\beta(\omega)} S_{AB}(\omega) 
+        %& \text{(QM)} \\ \\
+        %\frac{\omega}{2 kT} S_{AB}(\omega) 
+        %& \text{(classical)}
+    %\end{cases}
+%\end{equation*}
+%}
+%\end{frame}
+
+%\begin{frame}[t]{Conclusion}
+%Relations between
+%\begin{equation*}
+%\delta A \iff \chi_{AB} \iff \chi''_{AB} \iff S_{AB}
+%\end{equation*}
+%\only<2-4>{
+%Linear response theory:
+%\begin{equation*}
+    %\delta A(t) = (\chi_{AB} * h)(t) 
+    %\quad \Leftrightarrow \quad  
+        %\delta A(\omega) = \chi_{AB}(\omega) f(\omega) 
+%\end{equation*}
+%}\only<3-4>{
+%The fluctuation-dissipation theorem:
+%\begin{equation*}
+    %\chi_{AB}''(\omega) = 
+    %\begin{cases}
+        %\frac{\omega}{2 E_\beta(\omega)} S_{AB}(\omega) 
+        %& \text{(QM)} \\ \\
+        %\frac{\omega}{2 kT} S_{AB}(\omega) 
+        %& \text{(classical)}
+    %\end{cases}
+%\end{equation*}
+%}
+%\only<4>{
+%Application:
+%\begin{itemize}
+    %\item Microrheology
+%\item Testing equilibrium -- \emph{"Is a system actively driven?"}
+%\end{itemize}
+%}
+%\end{frame}
+\end{document}

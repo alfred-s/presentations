@@ -18,8 +18,7 @@ functional_microcircuits:
  the seminar `Language and Brain`, January 2016.
  * Contains an algorithm to shrink pdf figures (see `convert.py`).
 In order to run `.shrinkpdf.sh`, you have to give it permission. Use
-<pre><code>chmod +x shrinkpdf.sh</code></pre>
-`chmod +x shrinkpdf.sh</code></pre>`
+`chmod +x shrinkpdf.sh`
  * The uncompressed figures and final presentations are not
 uploaded (way too much data). 
 
@@ -34,5 +33,4 @@ https://github.com/pdfpc/pdfpc
 
  * Useful alias for removing latex overhead (which is not 
 uploaded anyways): 
-<pre><code>alias rmlat="rm *.aux *.bbl *.bcf *.blg *.fdb_latexmk *.fls *.log *.nav *.out *.run.xml *.snm *.toc
-"</code></pre>
+`alias rmlat="rm *.aux *.bbl *.bcf *.blg *.fdb_latexmk *.fls *.log *.nav *.out *.run.xml *.snm *.toc"`
