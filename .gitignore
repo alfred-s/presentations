@@ -99,9 +99,8 @@ data/
 *.png
 
 # Large files for functional microcircuits.
-functional_microcircuits/figures/
-functional_microcircuits/final_pres/
-functional_microcircuits/full_pdf/
-functional_microcircuits/images/
-functional_microcircuits/svg_files/
+functional_microcircuits_uncompressed.pdf
+functional_microcircuits/images/*
+functional_microcircuits/svg_files/*
 functional_microcircuits/publications/
+functional_microcircuits/uncompressed_figures/*

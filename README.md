@@ -14,6 +14,8 @@ functional_microcircuits:
  structure after the onset of visual stimuli, given for
  the seminar `Language and Brain`, January 2016.
  * Contains an algorithm to shrink pdf figures (see `convert.py`).
+In order to run `.shrinkpdf.sh`, you have to give it permission. Use
+<pre><code>chmod +x shrinkpdf.sh</code></pre>
  * Figures and the final presentations are not
 uploaded (way too much data). 
 
