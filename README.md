@@ -14,22 +14,19 @@ functional_microcircuits:
  structure after the onset of visual stimuli, given for
  the seminar `Language and Brain`, January 2016.
  * Contains an algorithm to shrink pdf figures (see `convert.py`).
+ * Figures and the final presentations are not
+uploaded (way too much data). 
 
 microcircuit:
  * Final presentation of the work I've done during my bachelor thesis.
 
 
 ### General comments:
-Figures and the final presentations are not
-uploaded (way too much data). 
-
-A nice tool for presentations:
-pdfpc -- includes infos for the presentation on a second screen
-
+ * A nice tool for presentations:
+pdfpc -- includes infos for the presentation on a second screen:
 https://github.com/pdfpc/pdfpc
 
-Useful alias for removing latex overhead (which is not 
+ * Useful alias for removing latex overhead (which is not 
 uploaded anyways): 
-
 <pre><code>alias rmlat="rm *.aux *.bbl *.bcf *.blg *.fdb_latexmk *.fls *.log *.nav *.out *.run.xml *.snm *.toc
 "</code></pre>

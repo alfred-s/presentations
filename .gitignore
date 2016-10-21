@@ -98,13 +98,10 @@ data/
 # Pictures
 *.png
 
-# images
-images/
-figures/
-svg_files/
-full_pdf/
-publications/
-final_pres/
-
-microcircuit
-functional_microcircuits
+# Large files for functional microcircuits.
+functional_microcircuits/figures/
+functional_microcircuits/final_pres/
+functional_microcircuits/full_pdf/
+functional_microcircuits/images/
+functional_microcircuits/svg_files/
+functional_microcircuits/publications/
