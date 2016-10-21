@@ -9,6 +9,9 @@ presentation_template:
  * This is a vary basic template for latex presentations, including figures, formulas and tables. 
  * Based on yet another template. 
 
+fluctuation_dissipation_theorem:
+ * Presentation for termpaper on the *Fluctutation-Dissipation Theorem*.
+
 functional_microcircuits:
  * Talk concerning feature specific networks and the changing 
  structure after the onset of visual stimuli, given for
@@ -16,6 +19,7 @@ functional_microcircuits:
  * Contains an algorithm to shrink pdf figures (see `convert.py`).
 In order to run `.shrinkpdf.sh`, you have to give it permission. Use
 <pre><code>chmod +x shrinkpdf.sh</code></pre>
+`chmod +x shrinkpdf.sh</code></pre>`
  * The uncompressed figures and final presentations are not
 uploaded (way too much data). 
 
