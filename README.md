@@ -31,5 +31,5 @@ https://github.com/pdfpc/pdfpc
 Useful alias for removing latex overhead (which is not 
 uploaded anyways): 
 
-<alias rmlat="rm *.aux *.bbl *.bcf *.blg *.fdb_latexmk *.fls *.log *.nav *.out *.run.xml *.snm *.toc
-">
+<pre><code>alias rmlat="rm *.aux *.bbl *.bcf *.blg *.fdb_latexmk *.fls *.log *.nav *.out *.run.xml *.snm *.toc
+"</code></pre>
