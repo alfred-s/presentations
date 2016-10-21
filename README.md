@@ -5,24 +5,26 @@ All presentations can be compiled with the latest texlive-full
 distribution, and the font "cmbright", which can be downloaded
 at http://www.ctan.org/pkg/cmbright. Compile using pdflatex.
 
-presentation_template:
+**presentation_template:**
  * This is a vary basic template for latex presentations, including figures, formulas and tables. 
  * Based on yet another template. 
 
-fluctuation_dissipation_theorem:
+**fluctuation_dissipation_theorem:**
  * Presentation for termpaper on the *Fluctutation-Dissipation Theorem*.
 
-functional_microcircuits:
+**functional_microcircuits:**
  * Talk concerning feature specific networks and the changing 
  structure after the onset of visual stimuli, given for
- the seminar `Language and Brain`, January 2016.
+ the seminar *Language and Brain*, January 2016.
  * Contains an algorithm to shrink pdf figures (see `convert.py`).
-In order to run `.shrinkpdf.sh`, you have to give it permission. Use
-`chmod +x shrinkpdf.sh`
+In order to run `.shrinkpdf.sh`, you have to give it permission:
+```
+chmod +x shrinkpdf.sh
+```
  * The uncompressed figures and final presentations are not
 uploaded (way too much data). 
 
-microcircuit:
+**microcircuit:**
  * Final presentation of the work I've done during my bachelor thesis.
 
 
@@ -33,4 +35,6 @@ https://github.com/pdfpc/pdfpc
 
  * Useful alias for removing latex overhead (which is not 
 uploaded anyways): 
-`alias rmlat="rm *.aux *.bbl *.bcf *.blg *.fdb_latexmk *.fls *.log *.nav *.out *.run.xml *.snm *.toc"`
+```
+alias rmlat="rm *.aux *.bbl *.bcf *.blg *.fdb_latexmk *.fls *.log *.nav *.out *.run.xml *.snm *.toc"
+```
