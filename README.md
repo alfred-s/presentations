@@ -27,6 +27,9 @@ uploaded (way too much data).
 **microcircuit:**
  * Final presentation of the work I've done during my bachelor thesis.
 
+**poster_microcircuit:**
+ * Poster about the work I've done during my bachelor thesis.
+
 
 ### General comments:
  * A nice tool for presentations:
